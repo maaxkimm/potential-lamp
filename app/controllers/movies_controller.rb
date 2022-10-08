@@ -8,6 +8,22 @@ class MoviesController < ApplicationController
   
     def index
       @movies = Movie.all
+      # initialize all_ratings and handle nil cases for the ratings
+      @all_ratings = Movie.all_ratings
+
+      # set up array if check boxes are checked
+      if params.has_key?(:ratings)
+        # grab the keys of the hash using .keys 
+        # set to @ratings_to_show (from index.html.erb)
+        @ratings_to_show = params[:ratings].keys
+      # empty array if no check boxes are checked
+      else
+        @ratings_to_show = []
+      end
+
+      # replace Movie.all (restrict DB query)
+      @movies = Movie.with_ratings(@ratings_to_show)
+      
     end
   
     def new
