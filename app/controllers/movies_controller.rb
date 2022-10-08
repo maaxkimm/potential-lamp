@@ -11,6 +11,11 @@ class MoviesController < ApplicationController
       # initialize all_ratings and handle nil cases for the ratings
       @all_ratings = Movie.all_ratings
 
+      # [NEW] settings in session but not in params -> redirect
+      if !params.has_key?(:sort_column) && !params.has_key?(:ratings)
+        redirect_to movies_path(:sort_column => session[:sort_column], :ratings => session[:ratings])
+      end
+
       # set up array if check boxes are checked
       if params.has_key?(:ratings)
         # grab the keys of the hash using .keys 
@@ -18,7 +23,7 @@ class MoviesController < ApplicationController
         @ratings_to_show = params[:ratings].keys
       # empty array if no check boxes are checked
       else
-        @ratings_to_show = []
+        @ratings_to_show = @all_ratings
       end
 
       # replace Movie.all (restrict DB query)
@@ -41,6 +46,10 @@ class MoviesController < ApplicationController
         end    
       end
 
+      # [NEW] save hashed rating settings
+      session[:ratings] = @hashed_ratings
+      # [NEW] save sort settings
+      session[:sort_column] = params[:sort_column]
     end
   
     def new
