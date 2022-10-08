@@ -23,7 +23,24 @@ class MoviesController < ApplicationController
 
       # replace Movie.all (restrict DB query)
       @movies = Movie.with_ratings(@ratings_to_show)
-      
+
+      # create hashed ratings for view
+      @hashed_ratings = Hash[@ratings_to_show.map {|key| [key, 1]}]
+
+      # initialize to prevent errors
+      @title_header_css, @release_date_header_css = "", ""
+      if (params.has_key?(:sort_column))
+        if params[:sort_column] == "title"
+          # order by the sort_column
+          @movies = @movies.order("title")
+          # yellow bckgrnd, hilite
+          @title_header_css = 'bg-warning hilite'
+        elsif params[:sort_column] == "release_date"
+          @movies = @movies.order("release_date")
+          @release_date_header_css = 'bg-warning hilite'
+        end    
+      end
+
     end
   
     def new

@@ -17,8 +17,12 @@
 <table class="table table-striped col-md-12" id="movies">
   <thead>
     <tr>
-      <th>Movie Title</th>
-      <th>Rating</th>
+      <th class="<%=@title_header_css%>">
+        <%= link_to "Movie Title", movies_path(:sort_column => 'title', :ratings => @hashed_ratings), :id => "title_header" %>
+      </th>
+      <th class="<%=@release_date_header_css%>">
+        <%= link_to "Rating", movies_path(:sort_column => 'release_date', :ratings => @hashed_ratings), :id => "release_date_header" %>
+      </th>
       <th>Release Date</th>
       <th>More Info</th>
     </tr>
