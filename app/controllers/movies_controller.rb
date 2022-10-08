@@ -8,6 +8,7 @@ class MoviesController < ApplicationController
   
     def index
       @movies = Movie.all
+      
       # initialize all_ratings and handle nil cases for the ratings
       @all_ratings = Movie.all_ratings
 
